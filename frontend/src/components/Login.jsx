@@ -1,13 +1,33 @@
 import React from "react";
-import GoogleLogin from "react-google-login";
-import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logowhite.png";
+import axios from "axios";
+
+import { client } from "../client";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const responseGoogle = (response) => {
+  const navigate = useNavigate();
+  const responseGoogle = async (response) => {
     console.log(response);
+    const userData = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${response.credential}`
+    );
+    console.log(userData);
+    localStorage.setItem("user", JSON.stringify(response.profileObj));
+
+    const { name, email, picture } = userData.data || {};
+    const doc = {
+      _id: email.replace("@", "-").replace(".", "-"),
+      _type: "user",
+      userName: name,
+      image: picture,
+    };
+    client.createIfNotExists(doc).then(() => {
+      navigate("/", { replace: true });
+    });
   };
   return (
     <div className="flex justify-start items-center flex-col h-screen">
