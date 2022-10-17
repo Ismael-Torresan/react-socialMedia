@@ -16,11 +16,10 @@ const Login = () => {
       `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${response.credential}`
     );
     console.log(userData);
-    localStorage.setItem("user", JSON.stringify(response.profileObj));
-
-    const { name, email, picture } = userData.data || {};
+    localStorage.setItem("user", JSON.stringify(userData.data));
+    const { name, exp, picture } = userData.data || {};
     const doc = {
-      _id: email.replace("@", "-").replace(".", "-"),
+      _id: exp,
       _type: "user",
       userName: name,
       image: picture,
