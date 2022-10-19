@@ -26,6 +26,7 @@ const Home = () => {
       setUser(data[0]);
     });
   }, []);
+  console.log(userInfo);
 
   useEffect(() => {
     scrollRef.current.scrollTo(0, 0);
@@ -48,7 +49,7 @@ const Home = () => {
           </Link>
           <Link to={`user-profile/${user?._id}`}>
             <img
-              src={user?.image}
+              src={user?.picture}
               alt="user-pic"
               className="w-9 h-9 rounded-full "
             />
